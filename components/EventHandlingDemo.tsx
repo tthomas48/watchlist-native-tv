@@ -15,7 +15,6 @@ import { useState } from 'react';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useScale } from '@/hooks/useScale';
-import { useThemeColor } from '@/hooks/useThemeColor';
 
 export function EventHandlingDemo() {
   const [remoteEventLog, setRemoteEventLog] = useState<string[]>([]);

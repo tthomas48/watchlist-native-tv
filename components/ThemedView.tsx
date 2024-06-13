@@ -1,14 +1,8 @@
 import { View, type ViewProps } from 'react-native';
+import * as eva from '@eva-design/eva';
+import { ApplicationProvider, Layout, Text } from '@ui-kitten/components';
+import theme from '@/constants/theme.json';
+export function ThemedView({  ...otherProps }) {
 
-import { useThemeColor } from '@/hooks/useThemeColor';
-
-export type ThemedViewProps = ViewProps & {
-  lightColor?: string;
-  darkColor?: string;
-};
-
-export function ThemedView({ style, lightColor, darkColor, ...otherProps }: ThemedViewProps) {
-  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
-
-  return <View style={[{ backgroundColor }, style]} {...otherProps} />;
+  return <ApplicationProvider {...eva} theme={theme} {...otherProps} />;
 }

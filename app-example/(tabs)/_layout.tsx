@@ -3,7 +3,6 @@ import React from 'react';
 import { Pressable } from 'react-native';
 import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { useTextStyles } from '@/hooks/useTextStyles';
 
@@ -29,7 +28,6 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         tabBarStyle: {
           height: textStyles.title.lineHeight * 2,
           marginBottom: 0,
@@ -51,6 +49,20 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="login"
+        options={{
+          title: 'Login',
+          tabBarButton,
+          tabBarLabelStyle: textStyles.default,
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? 'log-in' : 'log-in-outline'}
+              color={color}
+            />
+          ),
+        }}
+      />      
       <Tabs.Screen
         name="explore"
         options={{

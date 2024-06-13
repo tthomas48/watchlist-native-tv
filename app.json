@@ -33,6 +33,10 @@
       "typedRoutes": true
     },
     "name": "watchlist-native-tv",
-    "slug": "watchlist-native-tv"
+    "slug": "watchlist-native-tv",
+    "android": {
+      "package": "com.anonymous.watchlistnativetv",
+      "permissions": ["android.permission.INTERNET"]
+    }
   }
 }
