@@ -3,7 +3,7 @@ import { LoginError } from './LoginError';
 
 class WatchlistService {
   constructor() {
-    this.url = 'https://pelican-immune-remarkably.ngrok-free.app/api';
+    this.url = process.env.EXPO_PUBLIC_WATCHLIST_API,    
   }
   async authorize() {
     const accessToken = await tokenService.getAccessToken();
