@@ -48,10 +48,5 @@
         "projectId": "e7e07123-7463-41ba-af08-ea34ec57091c"
       }
     }
-  },
-  "splash": {
-    "image": "./assets/images/splash.png",
-    "resizeMode": "contain",
-    "backgroundColor": "#25292e"
   }
 }
