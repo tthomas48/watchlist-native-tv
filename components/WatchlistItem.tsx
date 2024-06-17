@@ -1,11 +1,16 @@
-import { StyleSheet, Image, TouchableHighlight, Linking, Alert } from 'react-native';
-import { Text, Card } from '@ui-kitten/components';
+import { useState, useEffect } from 'react';
+import { StyleSheet, Image, TouchableHighlight, Alert } from 'react-native';
+import { Text, Card, Layout } from '@ui-kitten/components';
 import watchlistService from '../app/service/watchlist.service';
+import { startActivityAsync } from 'expo-intent-launcher';
+import QRCode from 'react-native-qrcode-svg';
 
 const styles = StyleSheet.create({
   poster: {
     width: '100%',
     height: '90%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   item: {
     width: '25%',
@@ -25,21 +30,59 @@ const getItemStatus = (item) => {
   return 'basic';
 };
 
-export function WatchlistItem({ item, index, separators }) {
+export function WatchlistItem({ item, index, separators, sound }) {
+  const [longPress, setLongPress] = useState<boolean>(false);
+
+  const getCard = () => {
+    if (longPress) {
+      const editUrl = watchlistService.GetEditUrl(item.id);
+      return (
+        <Card appearance="filled" status={getItemStatus(item)}>
+          <Layout style={styles.poster}>
+            <QRCode value={editUrl} size={150} />
+          </Layout>
+          <Text style={styles.title} numberOfLines={1} ellipsizeMode='tail'>Edit {item.title}</Text>
+        </Card>
+      );
+    }
+    return (
+      <Card appearance="filled" status={getItemStatus(item)}>
+        <Image
+          style={styles.poster}
+          source={{
+            uri: `${watchlistService.url}/img/${item.id}`,
+          }}
+        />
+        <Text style={styles.title} numberOfLines={1} ellipsizeMode='tail'>{item.title}</Text>
+      </Card>
+    );
+  }
+
+  const playSound = async (item) => {
+    if (sound) {
+      const status = await sound.playAsync();
+    }
+  };
   const onPress = async (item) => {
     try {
+      setLongPress(false);
       const json = await watchlistService.Play(item.id);
       if (!json.result) {
-        throw(json.message);
+        throw (json.message);
       }
       var component = json.component;
       var data = json.data;
-      await Linking.sendIntent('android.intent.action.VIEW', [{key: 'data', value: data}, {key: 'component', value: component }]);
-    } catch(e) {
+      await playSound(item);
+      await startActivityAsync('android.intent.action.VIEW', { data, packageName: component });
+    } catch (e) {
       Alert.alert(`${e}`);
     }
   };
-   return (
+  const onLongPress = async (item) => {
+    setLongPress(true);
+  };
+  const card = getCard();
+  return (
     <TouchableHighlight
       activeOpacity={0.7}
       underlayColor="#e5b0a4"
@@ -47,16 +90,10 @@ export function WatchlistItem({ item, index, separators }) {
       onPress={() => onPress(item)}
       onShowUnderlay={separators.highlight}
       onHideUnderlay={separators.unhighlight}
-      style={styles.item}>
-    <Card appearance="filled" status={getItemStatus(item)}>
-          <Image
-            style={styles.poster}
-            source={{
-              uri: `${watchlistService.url}/img/${item.id}`,
-            }}
-          />
-          <Text style={styles.title} numberOfLines={1} ellipsizeMode='tail'>{item.title}</Text>
-        </Card>
-        </TouchableHighlight>
-   );
+      style={styles.item}
+      onBlur={() => setLongPress(false)}
+      onLongPress={() => onLongPress(item)}>
+      {card}
+    </TouchableHighlight>
+  );
 }

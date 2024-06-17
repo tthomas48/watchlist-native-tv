@@ -3,7 +3,7 @@ import { LoginError } from './LoginError';
 
 class WatchlistService {
   constructor() {
-    this.url = process.env.EXPO_PUBLIC_WATCHLIST_API,    
+    this.url = process.env.EXPO_PUBLIC_WATCHLIST_API;
   }
   async authorize() {
     const accessToken = await tokenService.getAccessToken();
@@ -52,6 +52,10 @@ class WatchlistService {
     } catch (e) {
       console.error(e);
     }
+  }
+
+  GetEditUrl(itemId) {
+    return `${this.url}/../watchable/${itemId}`;
   }
   
   async Play(itemId) {

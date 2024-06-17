@@ -36,7 +36,22 @@
     "slug": "watchlist-native-tv",
     "android": {
       "package": "com.anonymous.watchlistnativetv",
-      "permissions": ["android.permission.INTERNET"]
+      "permissions": [
+        "android.permission.INTERNET"
+      ]
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "e7e07123-7463-41ba-af08-ea34ec57091c"
+      }
     }
+  },
+  "splash": {
+    "image": "./assets/images/splash.png",
+    "resizeMode": "contain",
+    "backgroundColor": "#25292e"
   }
 }

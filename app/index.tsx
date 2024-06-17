@@ -6,6 +6,7 @@ import { WatchlistItem } from '../components/WatchlistItem';
 import watchlistService from './service/watchlist.service';
 import tokenService from './service/token.service';
 import { LoginError } from './service/LoginError';
+import { Audio } from 'expo-av';
 
 const ListIcon = (): IconElement => (
   <Icon
@@ -48,6 +49,7 @@ const refreshList = async (navigation, setList : Dispatch<SetStateAction<never[]
 export default function Index({ navigation }) {
   const [menuVisible, setMenuVisible] = useState(false);
   const [list, setList] = useState([]);
+  const [sound, setSound] = useState<Audio.Sound>();
 
   useEffect(() => {
     // componentDidMount
@@ -56,12 +58,19 @@ export default function Index({ navigation }) {
     DevSettings.addMenuItem('Clear access token', () => {
       tokenService.clearTokens();
     });
-  }, []);
+    Audio.Sound.createAsync(require('../sounds/boop.wav')).then((res) => {
+      setSound(res.sound);
+    });  
+  }, [sound]);
 
   useFocusEffect(useCallback(() => {
     refreshList(navigation, setList);
     return () => {
       // do nothing on unfocus
+      console.log('Unloading Sound');
+      if (sound) {
+        sound.unloadAsync();      
+      }
     }
   }, []));
 
@@ -104,7 +113,9 @@ export default function Index({ navigation }) {
         }}
         data={list}
         numColumns={4}
-        renderItem={WatchlistItem}
+        renderItem={({item, index, separators}) => (
+          <WatchlistItem item={item} index={index} separators={separators} sound={sound} />
+        )}
         keyExtractor={(item) => `${item.id}.wrapper`}
       />
 
