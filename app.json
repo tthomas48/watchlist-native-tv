@@ -23,6 +23,7 @@
             "newArchEnabled": false
           },
           "android": {
+            "useLegacyPackaging": true,
             "newArchEnabled": false
           }
         }
