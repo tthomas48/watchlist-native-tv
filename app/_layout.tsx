@@ -9,7 +9,7 @@ export default function RootLayout() {
     <>
       <IconRegistry icons={EvaIconsPack}/>
       <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>
-          <AppNavigator/>
+            <AppNavigator/>
       </ApplicationProvider>
     </>
   );
